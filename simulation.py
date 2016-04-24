@@ -27,20 +27,38 @@ class Qubit(object):
             print "Bad spin"
             return False
 
+    def update(self):
+        self.theta = math.atan2(math.sqrt(self.x**2 + self.y**2), math.sqrt(self.z**2))
+        self.phi = math.atan2(math.sqrt(self.x**2 + self.y**2), math.sqrt(self.x**2))
+        self.alpha = math.cos(self.theta/2.)
+        self.beta = (math.e**(1j*self.phi))*math.sin(self.theta/2.)
+
 class Gate(object):
     '''Base class to define other gates from,
     Matrix needs to be numpy matrix'''
     def __init__(self, matrix):
         self.operation = matrix
 
-def notgate():
-    # rotates 
-    pass
-    
+def paulix(qubit):
+    # rotates the bloch spere around the x axis by pi
+    qubit.y = -1*qubit.y
+    qubit.z = -1*qubit.z
+    qubit.update()
 
+def pauliy(qubit):
+    # rotates the bloch spere around the y axis by pi
+    qubit.x = -1*qubit.x
+    qubit.z = -1*qubit.z
+
+def pauliz(qubit):
+    # rotates the bloch spere around the y axis by pi
+    qubit.x = -1*qubit.x
+    qubit.y = -1*qubit.y
 
 def test():
-    testBit = Qubit(-1,1,0)
+    testBit = Qubit(1,1,1)
+    testBit.check()
+    paulix(testBit)
     testBit.check()
 
 if __name__ == '__main__':
