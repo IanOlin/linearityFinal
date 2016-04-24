@@ -21,6 +21,7 @@ class Qubit(object):
             print self.x, self.y, self.z
             print self.theta, self.phi
             print self.alpha, self.beta
+            print self.alpha**2, abs(self.beta**2)
             return True
         else:
             print "Bad spin"
@@ -31,12 +32,15 @@ class Gate(object):
     Matrix needs to be numpy matrix'''
     def __init__(self, matrix):
         self.operation = matrix
+
+def notgate():
+    # rotates 
+    pass
     
 
 
-
 def test():
-    testBit = Qubit(0,1,0)
+    testBit = Qubit(-1,1,0)
     testBit.check()
 
 if __name__ == '__main__':
