@@ -1,4 +1,5 @@
 import math
+import cmath
 import numpy as np 
 
 class Qubit(object):
@@ -9,9 +10,11 @@ class Qubit(object):
         self.y = y
         self.z = z
         self.theta = math.atan2(math.sqrt(x**2 + y**2), math.sqrt(z**2))
+        #self.theta = cmath.phase()
         self.phi = math.atan2(math.sqrt(x**2 + y**2), math.sqrt(x**2))
         self.alpha = math.cos(self.theta/2.)
         self.beta = (math.e**(1j*self.phi))*math.sin(self.theta/2.)
+        self.updated = False
         # zero  probablility is alpha^2
         # one probability is beta ^2
 
@@ -32,6 +35,7 @@ class Qubit(object):
         self.phi = math.atan2(math.sqrt(self.x**2 + self.y**2), math.sqrt(self.x**2))
         self.alpha = math.cos(self.theta/2.)
         self.beta = (math.e**(1j*self.phi))*math.sin(self.theta/2.)
+        self.updated = True
 
 class Gate(object):
     '''Base class to define other gates from,
@@ -39,11 +43,21 @@ class Gate(object):
     def __init__(self, matrix):
         self.operation = matrix
 
+def flip(qubit):
+    #flips a 0 and 1
+    #TODO: make this flip around the middle of this range
+    if qubit == 0:
+        return 1
+    if qubit == 1:
+        return 0
+
 def paulix(qubit):
     # rotates the bloch spere around the x axis by pi
-    qubit.y = -1*qubit.y
-    qubit.z = -1*qubit.z
+    qubit.y = flip(qubit.y)
+    qubit.z = flip(qubit.z)
+    print qubit.theta, " pre", qubit.updated
     qubit.update()
+    print qubit.theta, " post", qubit.updated
 
 def pauliy(qubit):
     # rotates the bloch spere around the y axis by pi
