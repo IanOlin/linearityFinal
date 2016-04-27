@@ -1,5 +1,4 @@
 import math
-import cmath
 import numpy as np 
 
 class Qubit(object):
@@ -10,7 +9,6 @@ class Qubit(object):
         self.y = y
         self.z = z
         self.theta = math.atan2(math.sqrt(x**2 + y**2), math.sqrt(z**2))
-        #self.theta = cmath.phase()
         self.phi = math.atan2(math.sqrt(x**2 + y**2), math.sqrt(x**2))
         self.alpha = math.cos(self.theta/2.)
         self.beta = (math.e**(1j*self.phi))*math.sin(self.theta/2.)
@@ -37,32 +35,53 @@ class Qubit(object):
         self.beta = (math.e**(1j*self.phi))*math.sin(self.theta/2.)
 
 
-def flip(qubit):
+def piflip(qubit):
     #flips a 0 and 1
-    #TODO: make this flip around the middle of this range
     dif = qubit - .5
     return .5 - dif
 
+def rotate(qubit,axis,amount):
+    #rotate by pi
+    #non-matrix method
+    axes = ['x','y','z']
+    axes.remove(axis)
+    a = axes[0]
+    b = axes[1]
+    print a,b
+    print qubit.a, qubit.b
+    length = qubit
+
+def rotateTest():
+    testBit = Qubit(1,1,1)
+    rotate(testBit, 'y', math.pi)
+    
+
 def paulix(qubit):
     # rotates the bloch spere around the x axis by pi
-    qubit.y = flip(qubit.y)
-    qubit.z = flip(qubit.z)
+    qubit.y = piflip(qubit.y)
+    qubit.z = piflip(qubit.z)
     qubit.update()
 
 
 def pauliy(qubit):
     # rotates the bloch spere around the y axis by pi
-    qubit.x = flip(qubit.x)
-    qubit.z = flip(qubit.z)
+    qubit.x = piflip(qubit.x)
+    qubit.z = piflip(qubit.z)
     qubit.update()
 
 def pauliz(qubit):
     # rotates the bloch spere around the y axis by pi
-    qubit.x = flip(qubit.x)
-    qubit.y = flip(qubit.y)
+    qubit.x = piflip(qubit.x)
+    qubit.y = piflip(qubit.y)
     qubit.update()
 
-def test():
+def hadamard(qubit):
+    #change the basis to be over root 2
+    #maps 0 to 0 + 1 over two
+    #qubit.alpha = (qubit.alpha + qubit.beta)/math.sqrt(2)
+    pass
+
+def testxyz():
     testBit = Qubit(1,1,1)
     print "start"
     testBit.check()
@@ -76,5 +95,16 @@ def test():
     print "pauliz"
     testBit.check()
 
+def testHadamard():
+    testBit = Qubit(1,1,1)
+    print "start"
+    testBit.check()
+    print "hadamard"
+    hadamard(testBit)
+    testBit.check()
+
+
 if __name__ == '__main__':
-    test()
+    #testxyz()
+    #testHadamard()
+    rotateTest()
