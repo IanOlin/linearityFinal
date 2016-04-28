@@ -105,6 +105,6 @@ def testHadamard():
 
 
 if __name__ == '__main__':
-    #testxyz()
+    testxyz()
     #testHadamard()
-    rotateTest()
+    #rotateTest()
