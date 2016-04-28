@@ -5,10 +5,7 @@ class Qubit(object):
     '''This defines a qubit in our simulation, we will be using a spin-(1/2) particle
     spin is defined as (alpha)|0> + (beta)|1> '''
     def __init__(self, x, y, z):
-        self.x = x
-        self.y = y
-        self.z = z
-        spinVector = numpy.array([x,y,z])
+        self.spinVector = numpy.array([x,y,z])
         self.theta = math.atan2(math.sqrt(x**2 + y**2), math.sqrt(z**2))
         self.phi = math.atan2(math.sqrt(x**2 + y**2), math.sqrt(x**2))
         self.alpha = math.cos(self.theta/2.)
@@ -19,11 +16,10 @@ class Qubit(object):
     def check(self):
         if abs(self.alpha)**2 + abs(self.beta)**2 == 1:
             print "Good spin"
-            print self.x, self.y, self.z
-            print spinVector[0],spinVector[1], spinVector[2]
-            print self.theta, self.phi
+            print self.spinVector[0],self.spinVector[1], self.spinVector[2]
+            '''print self.theta, self.phi
             print self.alpha, self.beta
-            print self.alpha**2, abs(self.beta**2)
+            print self.alpha**2, abs(self.beta**2)'''
             return True
         else:
             print "Bad spin"
@@ -50,13 +46,16 @@ def rotate(qubit,axis,amount):
     zMatrix = numpy.array([[math.cos(amount), -1*math.sin(amount), 0], [math.sin(amount), math.cos(amount), 0], [0, 0, 1]])
     axes = ['x', 'y', 'z']
     thisAxis=axes.index(axis)
-    
-
+    operations = [xMatrix, yMatrix, zMatrix]
+    operation = operations[thisAxis]
+    qubit.spinVector = numpy.matmul(qubit.spinVector, operation)
 
 
 def rotateTest():
-    testBit = Qubit(1,1,1)
+    testBit = Qubit(1,1.0,1)
+    testBit.check()
     rotate(testBit, 'y', math.pi)
+    testBit.check()
     
 
 def paulix(qubit):
