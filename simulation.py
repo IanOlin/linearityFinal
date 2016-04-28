@@ -23,12 +23,13 @@ class Qubit(object):
             return True
         else:
             print "Bad spin"
+            print self.spinVector[0],self.spinVector[1], self.spinVector[2]
             return False
 
 
     def update(self):
-        self.theta = math.atan2(math.sqrt(self.x**2 + self.y**2), math.sqrt(self.z**2))
-        self.phi = math.atan2(math.sqrt(self.x**2 + self.y**2), math.sqrt(self.x**2))
+        self.theta = math.atan2(math.sqrt(self.spinVector[0]**2 + self.spinVector[1]**2), math.sqrt(self.spinVector[2]**2))
+        self.phi = math.atan2(math.sqrt(self.spinVector[0]**2 + self.spinVector[1]**2), math.sqrt(self.spinVector[0]**2))
         self.alpha = math.cos(self.theta/2.)
         self.beta = (math.e**(1j*self.phi))*math.sin(self.theta/2.)
 
@@ -40,7 +41,6 @@ def piflip(qubit):
 
 def rotate(qubit,axis,amount):
     #rotate by pi
-    #non-matrix method
     xMatrix = numpy.array([[1, 0, 0], [0, math.cos(amount), -1*math.sin(amount)], [0, math.sin(amount), math.cos(amount)]])
     yMatrix = numpy.array([[math.cos(amount), 0, math.sin(amount)], [0, 1, 0], [-1*math.sin(amount), 0, math.cos(amount)]])
     zMatrix = numpy.array([[math.cos(amount), -1*math.sin(amount), 0], [math.sin(amount), math.cos(amount), 0], [0, 0, 1]])
@@ -60,21 +60,18 @@ def rotateTest():
 
 def paulix(qubit):
     # rotates the bloch spere around the x axis by pi
-    qubit.y = piflip(qubit.y)
-    qubit.z = piflip(qubit.z)
+    rotate(qubit, 'x', math.pi)
     qubit.update()
 
 
 def pauliy(qubit):
     # rotates the bloch spere around the y axis by pi
-    qubit.x = piflip(qubit.x)
-    qubit.z = piflip(qubit.z)
+    rotate(qubit, 'y', math.pi)
     qubit.update()
 
 def pauliz(qubit):
     # rotates the bloch spere around the y axis by pi
-    qubit.x = piflip(qubit.x)
-    qubit.y = piflip(qubit.y)
+    rotate(qubit, 'z', math.pi)
     qubit.update()
 
 def hadamard(qubit):
@@ -96,7 +93,7 @@ def testxyz():
     testBit.check()
 
 def testHadamard():
-    testBit = Qubit(1,1,1)
+    testBit = Qubit(1,1.0,1)
     print "start"
     testBit.check()
     print "hadamard"
@@ -105,6 +102,6 @@ def testHadamard():
 
 
 if __name__ == '__main__':
-    #testxyz()
-    testHadamard()
+    testxyz()
+    #testHadamard()
     #rotateTest()
