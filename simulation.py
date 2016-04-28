@@ -78,10 +78,8 @@ def pauliz(qubit):
     qubit.update()
 
 def hadamard(qubit):
-    #change the basis to be over root 2
-    #maps 0 to 0 + 1 over two
-    #qubit.alpha = (qubit.alpha + qubit.beta)/math.sqrt(2)
-    pass
+    rotate(qubit, 'y', math.pi/2)
+    rotate(qubit, 'x', math.pi)
 
 def testxyz():
     testBit = Qubit(1,1,1)
@@ -108,5 +106,5 @@ def testHadamard():
 
 if __name__ == '__main__':
     #testxyz()
-    #testHadamard()
-    rotateTest()
+    testHadamard()
+    #rotateTest()
