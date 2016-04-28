@@ -1,5 +1,5 @@
 import math
-import numpy as np 
+import numpy 
 
 class Qubit(object):
     '''This defines a qubit in our simulation, we will be using a spin-(1/2) particle
@@ -8,6 +8,7 @@ class Qubit(object):
         self.x = x
         self.y = y
         self.z = z
+        spinVector = numpy.array([x,y,z])
         self.theta = math.atan2(math.sqrt(x**2 + y**2), math.sqrt(z**2))
         self.phi = math.atan2(math.sqrt(x**2 + y**2), math.sqrt(x**2))
         self.alpha = math.cos(self.theta/2.)
@@ -19,6 +20,7 @@ class Qubit(object):
         if abs(self.alpha)**2 + abs(self.beta)**2 == 1:
             print "Good spin"
             print self.x, self.y, self.z
+            print spinVector[0],spinVector[1], spinVector[2]
             print self.theta, self.phi
             print self.alpha, self.beta
             print self.alpha**2, abs(self.beta**2)
@@ -43,13 +45,14 @@ def piflip(qubit):
 def rotate(qubit,axis,amount):
     #rotate by pi
     #non-matrix method
-    axes = ['x','y','z']
-    axes.remove(axis)
-    a = axes[0]
-    b = axes[1]
-    print a,b
-    print qubit.a, qubit.b
-    length = qubit
+    xMatrix = numpy.array([[1, 0, 0], [0, math.cos(amount), -1*math.sin(amount)], [0, math.sin(amount), math.cos(amount)]])
+    yMatrix = numpy.array([[math.cos(amount), 0, math.sin(amount)], [0, 1, 0], [-1*math.sin(amount), 0, math.cos(amount)]])
+    zMatrix = numpy.array([[math.cos(amount), -1*math.sin(amount), 0], [math.sin(amount), math.cos(amount), 0], [0, 0, 1]])
+    axes = ['x', 'y', 'z']
+    thisAxis=axes.index(axis)
+    
+
+
 
 def rotateTest():
     testBit = Qubit(1,1,1)
