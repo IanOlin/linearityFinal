@@ -14,7 +14,7 @@ class Qubit(object):
         # one probability is beta ^2
 
     def check(self):
-        if abs(self.alpha)**2 + abs(self.beta)**2 == 1:
+        if self.alpha**2 + abs(self.beta**2) < 1.001 and self.alpha**2 + abs(self.beta**2)> .999:
             print "Good spin"
             print self.spinVector[0],self.spinVector[1], self.spinVector[2]
             '''print self.theta, self.phi
@@ -24,12 +24,13 @@ class Qubit(object):
         else:
             print "Bad spin"
             print self.spinVector[0],self.spinVector[1], self.spinVector[2]
+            print self.alpha**2+ abs(self.beta**2)
             return False
 
 
     def update(self):
         self.theta = math.atan2(math.sqrt(self.spinVector[0]**2 + self.spinVector[1]**2), math.sqrt(self.spinVector[2]**2))
-        self.phi = math.atan2(math.sqrt(self.spinVector[0]**2 + self.spinVector[1]**2), math.sqrt(self.spinVector[0]**2))
+        self.phi = math.atan2((self.spinVector[1]**2), math.sqrt(self.spinVector[0]**2))
         self.alpha = math.cos(self.theta/2.)
         self.beta = (math.e**(1j*self.phi))*math.sin(self.theta/2.)
 
@@ -70,7 +71,7 @@ def pauliy(qubit):
     qubit.update()
 
 def pauliz(qubit):
-    # rotates the bloch spere around the y axis by pi
+    # rotates the bloch spere around the z axis by pi
     rotate(qubit, 'z', math.pi)
     qubit.update()
 
